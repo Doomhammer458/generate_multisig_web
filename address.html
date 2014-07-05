@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic|PT+Mono' rel='stylesheet' type='text/css'>
+		<link rel="shortcut icon" href="/static/favicon.ico" />
+		<link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Import Private Key </title>
+	</head>
+	<body>
+		<div id="title">Add secondary public keys</div>
+		
+		<div> Add the second and the third public keys below.</div>
+		
+		<br>
+		<div> First Address : {{pub1}}</div>
+		<br>
+		<div id="form-container">
+			<form method="post" action="/address/" >
+							<div class = "row">
+					
+						<input type="text" name="ID" value={{ID}} hidden  />
+					
+					
+				<div class = "row">
+					<label>Second Address 
+						<input type="text" name="key2" placeholder = "address"  />
+					
+					</label>
+				</div>
+				<div class = "row">
+					<label>Third Address 
+						<input type="text" name="key3" placeholder = "address"  />
+					
+					</label>
+				</div>
+				</div>
+				<br>
+				<input class="button" type=submit value="submit address">
+			</form>
+			<br>
+			
+	</body>
+</html>
