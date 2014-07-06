@@ -59,7 +59,12 @@ class AddressHandler(tornado.web.RequestHandler):
         ID = self.get_argument("ID")
         session = create_session()
         search= session.query(multi).filter(multi.ID==ID).first()
-        self.render("address.html",pub1= search.pub1,ID=ID)
+        if search.multi_address:
+            self.render("address2.html",pub1= search.pub1,ID=ID, pub2 = search.pub2,\
+            pub3 = search.pub3, madd = search.multi_address, redeem = search.redeem_script)
+        else:
+            self.render("address.html",pub1= search.pub1,ID=ID, pub2 = search.pub2,\
+            pub3 = search.pub3, madd = search.multi_address, redeem = search.redeem_script)
         session.close()
     def post(self):
         ID = self.get_argument("ID")
@@ -67,24 +72,27 @@ class AddressHandler(tornado.web.RequestHandler):
         search= session.query(multi).filter(multi.ID==ID).first()
         try:
             key2 = self.get_argument("key2")
-            search.pub2=key2
+            if len(key2)==34:
+                search.pub2=key2
         except:
             pass
-        try:
+        try:    
             key3 = self.get_argument("key3")
-            search.pub3=key3
+            if len(key3)==34:
+                print "key3 ", key3
+                search.pub3=key3
+
         except:
             pass
-        print search.pub1
-        print search.pub2
-        print search.pub3
         session.add(search)
         session.commit()
         session = create_session()
         search= session.query(multi).filter(multi.ID==ID).first()
-        if search.pub1 and search.pub2 and search.pub3:
-           multi_add =  doge.createmultisig(2,[search.pub1,search.pub3,search.pub2])
-           print multi_add
+        if search.pub1 and search.pub2 and search.pub3 and search.multi_address== None:
+            multi_add =  doge.createmultisig(2,[search.pub1,search.pub3,search.pub2])
+            print multi_add
+            search.multi_address = multi_add["address"]
+            search.redeem_script =multi_add["redeemScript"]
         session.add(search)
         session.commit()
         self.redirect("/address/?ID="+ID)
